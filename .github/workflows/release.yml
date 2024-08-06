@@ -88,12 +88,12 @@ jobs:
     - name: Create a tag
       id: create_tag
       env:
-        GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
-        git config --global user.name "github-actions[bot]"
+        git config --global user.name "ShafiqSadat"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git tag ${{ github.event.inputs.tag_name }}
-        git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} ${{ github.event.inputs.tag_name }}
+        git push https://ShafiqSadat:${GH_TOKEN}@github.com/${{ github.repository }} ${{ github.event.inputs.tag_name }}
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
@@ -101,4 +101,4 @@ jobs:
         files: ./build/*
         tag_name: ${{ github.event.inputs.tag_name }}
       env:
-        GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
