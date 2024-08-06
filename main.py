@@ -79,13 +79,12 @@ async def generate_key_process(app_token, promo_id):
         print(f"Failed to login: {e.response.json().get('message', 'Unknown error')}")
         return None
 
-    for _ in range(7):
+    for _ in range(10):
         await asyncio.sleep(EVENTS_DELAY * (random.random() / 3 + 1))
         try:
             has_code = await emulate_progress(client_token, promo_id)
         except httpx.HTTPStatusError as e:
-            print(f"Failed to register event: {e.response.json().get('message', 'Unknown error')}")
-            return None
+            continue
 
         if has_code:
             break
