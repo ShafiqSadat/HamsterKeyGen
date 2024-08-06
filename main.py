@@ -79,7 +79,7 @@ async def generate_key_process(app_token, promo_id):
         print(f"Failed to login: {e.response.json().get('message', 'Unknown error')}")
         return None
 
-    for _ in range(10):
+    for _ in range(11):
         await asyncio.sleep(EVENTS_DELAY * (random.random() / 3 + 1))
         try:
             has_code = await emulate_progress(client_token, promo_id)
