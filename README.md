@@ -16,12 +16,15 @@ This is an asynchronous Python script to generate Hamster Kombat Keys.
 ## Installation
 
 1. Clone the repository or download the script.
-2. Create a virtual environment (optional but recommended):
+   ```sh
+       git clone https://github.com/ShafiqSadat/HamsterKeyGen.git
+   ```
+3. Create a virtual environment (optional but recommended):
     ```sh
     python -m venv venv
     source venv/bin/activate # On Windows use `venv\Scripts\activate`
     ```
-3. Install the required packages:
+4. Install the required packages:
     ```sh
     pip install -r requirements.txt
     ```
