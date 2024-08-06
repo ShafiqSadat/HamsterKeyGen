@@ -8,8 +8,7 @@ This is an asynchronous Python script to generate Hamster Kombat Keys.
 - Emulate user progress and register events.
 - Generate and retrieve promo keys.
 - Optional proxy support.
-- Improved logging with `loguru`.
-- Append generated keys to `keys.txt` instead of overwriting.
+- Save keys into file.
 
 ## Requirements
 - Python 3.7+
