@@ -2,6 +2,11 @@ name: Build and Release
 
 on:
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'The name of the tag for the release'
+        required: true
+        default: 'v1.0.0'
 
 jobs:
   build-windows:
@@ -80,9 +85,18 @@ jobs:
         name: macos-build
         path: ./build
 
+    - name: Create a tag
+      id: create_tag
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git tag ${{ github.event.inputs.tag_name }}
+        git push origin ${{ github.event.inputs.tag_name }}
+
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         files: ./build/*
+        tag_name: ${{ github.event.inputs.tag_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
