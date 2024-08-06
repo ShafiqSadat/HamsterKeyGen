@@ -30,7 +30,8 @@ jobs:
           pyinstaller --onefile main.py
       - name: Rename executable
         run: |
-          rename dist/main.exe dist/HamsterKeyGen-${{ github.run_number }}.exe
+          Rename-Item -Path dist/main.exe -NewName HamsterKeyGen-${{ github.run_number }}.exe
+        shell: pwsh
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
