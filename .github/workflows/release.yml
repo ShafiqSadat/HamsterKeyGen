@@ -91,14 +91,13 @@ jobs:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
         git config --global user.name "ShafiqSadat"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.email "ShafiqSadat@users.noreply.github.com"
         git tag ${{ github.event.inputs.tag_name }}
-        git push https://ShafiqSadat:${GH_TOKEN}@github.com/${{ github.repository }} ${{ github.event.inputs.tag_name }}
+        git push https://ShafiqSadat:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} ${{ github.event.inputs.tag_name }}
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      uses: ncipollo/release-action@v1
       with:
-        files: ./build/*
-        tag_name: ${{ github.event.inputs.tag_name }}
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        artifacts: ./build/*
+        tag: ${{ github.event.inputs.tag_name }}
+        token: ${{ secrets.GH_TOKEN }}
