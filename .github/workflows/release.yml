@@ -30,13 +30,13 @@ jobs:
           pyinstaller --onefile main.py
       - name: Rename executable
         run: |
-          Rename-Item -Path dist/main.exe -NewName HamsterKeyGen-${{ github.run_number }}.exe
+          Rename-Item -Path dist/main.exe -NewName HamsterKeyGen-v1.0.${{ github.run_number }}.exe
         shell: pwsh
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: windows-build
-          path: dist/HamsterKeyGen-${{ github.run_number }}.exe
+          path: dist/HamsterKeyGen-v1.0.${{ github.run_number }}.exe
 
   build-macos:
     runs-on: macos-latest
@@ -56,12 +56,12 @@ jobs:
           pyinstaller --onefile main.py
       - name: Rename executable
         run: |
-          mv dist/main dist/HamsterKeyGen-${{ github.run_number }}
+          mv dist/main dist/HamsterKeyGen-v1.0.${{ github.run_number }}.app
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: macos-build
-          path: dist/HamsterKeyGen-${{ github.run_number }}
+          path: dist/HamsterKeyGen-v1.0.${{ github.run_number }}.app
 
   create-release:
     needs: [build-windows, build-macos]
