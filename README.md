@@ -47,5 +47,5 @@ This is an asynchronous Python script to generate Hamster Kombat Keys.
 - **main**: Main function to generate multiple keys concurrently.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under the GPL-3.0 license.
 
