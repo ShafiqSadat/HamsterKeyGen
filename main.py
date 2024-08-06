@@ -140,8 +140,7 @@ if __name__ == "__main__":
 
     proxy = asyncio.run(load_proxy(proxy_file))
 
-    logger.info(
-        f"Generating {key_count} key(s) for {games[game_choice]['name']} using proxy from {proxy_file if proxy else 'no proxy'}")
+    logger.info(f"Generating {key_count} key(s) for {games[game_choice]['name']} using proxy from {proxy_file if proxy else 'no proxy'}")
     keys, game_name = asyncio.run(main(game_choice, key_count, proxy))
     if keys:
         logger.success("Generated Key(s) was successfully saved to keys.txt.")
@@ -152,3 +151,5 @@ if __name__ == "__main__":
                 file.write(f"{formatted_key}\n")
     else:
         logger.error("No keys were generated.")
+
+    input("Press enter to exit")
