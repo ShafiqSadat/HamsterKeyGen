@@ -1,9 +1,7 @@
 name: Build and Release
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'  # Run this workflow only when a tag with a version number is pushed
+  workflow_dispatch:
 
 jobs:
   build-windows:
