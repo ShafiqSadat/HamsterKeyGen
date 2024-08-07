@@ -41,26 +41,23 @@ games = {
 
 EVENTS_DELAY = 20000 / 1000  # converting milliseconds to seconds
 
-
-async def load_proxy(file_path):
+async def load_proxies(file_path):
     try:
         if os.path.exists(file_path):
             with open(file_path, 'r') as file:
-                proxy = file.read().strip()
-                return proxy
+                proxies = [line.strip() for line in file if line.strip()]
+                return proxies
         else:
-            logger.info(f"Proxy file {file_path} not found. No proxy will be used.")
-            return None
+            logger.info(f"Proxy file {file_path} not found. No proxies will be used.")
+            return []
     except Exception as e:
         logger.error(f"Error reading proxy file {file_path}: {e}")
-        return None
-
+        return []
 
 async def generate_client_id():
     timestamp = int(time.time() * 1000)
     random_numbers = ''.join(str(random.randint(0, 9)) for _ in range(19))
     return f"{timestamp}-{random_numbers}"
-
 
 async def login(client_id, app_token, proxy=None):
     async with httpx.AsyncClient(proxies=proxy) as client:
@@ -71,7 +68,6 @@ async def login(client_id, app_token, proxy=None):
         response.raise_for_status()
         data = response.json()
         return data['clientToken']
-
 
 async def emulate_progress(client_token, promo_id, proxy=None):
     async with httpx.AsyncClient(proxies=proxy) as client:
@@ -84,7 +80,6 @@ async def emulate_progress(client_token, promo_id, proxy=None):
         data = response.json()
         return data['hasCode']
 
-
 async def generate_key(client_token, promo_id, proxy=None):
     async with httpx.AsyncClient(proxies=proxy) as client:
         response = await client.post(
@@ -96,9 +91,9 @@ async def generate_key(client_token, promo_id, proxy=None):
         data = response.json()
         return data['promoCode']
 
-
-async def generate_key_process(app_token, promo_id, proxy=None):
+async def generate_key_process(app_token, promo_id, proxies):
     client_id = await generate_client_id()
+    proxy = random.choice(proxies) if proxies else None
     try:
         client_token = await login(client_id, app_token, proxy)
     except httpx.HTTPStatusError as e:
@@ -107,6 +102,7 @@ async def generate_key_process(app_token, promo_id, proxy=None):
 
     for _ in range(11):
         await asyncio.sleep(EVENTS_DELAY * (random.random() / 3 + 1))
+        proxy = random.choice(proxies) if proxies else None
         try:
             has_code = await emulate_progress(client_token, promo_id, proxy)
         except httpx.HTTPStatusError as e:
@@ -115,6 +111,7 @@ async def generate_key_process(app_token, promo_id, proxy=None):
         if has_code:
             break
 
+    proxy = random.choice(proxies) if proxies else None
     try:
         key = await generate_key(client_token, promo_id, proxy)
         return key
@@ -122,13 +119,11 @@ async def generate_key_process(app_token, promo_id, proxy=None):
         logger.error(f"Failed to generate key: {e.response.json()}")
         return None
 
-
-async def main(game_choice, key_count, proxy):
+async def main(game_choice, key_count, proxies):
     game = games[game_choice]
-    tasks = [generate_key_process(game['appToken'], game['promoId'], proxy) for _ in range(key_count)]
+    tasks = [generate_key_process(game['appToken'], game['promoId'], proxies) for _ in range(key_count)]
     keys = await asyncio.gather(*tasks)
     return [key for key in keys if key], game['name']
-
 
 if __name__ == "__main__":
     print("Select a game:")
@@ -138,10 +133,10 @@ if __name__ == "__main__":
     key_count = int(input("Enter the number of keys to generate: "))
     proxy_file = input("Enter the proxy file path (leave empty to use 'proxy.txt'): ") or 'proxy.txt'
 
-    proxy = asyncio.run(load_proxy(proxy_file))
+    proxies = asyncio.run(load_proxies(proxy_file))
 
-    logger.info(f"Generating {key_count} key(s) for {games[game_choice]['name']} using proxy from {proxy_file if proxy else 'no proxy'}")
-    keys, game_name = asyncio.run(main(game_choice, key_count, proxy))
+    logger.info(f"Generating {key_count} key(s) for {games[game_choice]['name']} using proxies from {proxy_file if proxies else 'no proxies'}")
+    keys, game_name = asyncio.run(main(game_choice, key_count, proxies))
     if keys:
         logger.success("Generated Key(s) was successfully saved to keys.txt.")
         with open('keys.txt', 'a') as file:  # Open the file in append mode
