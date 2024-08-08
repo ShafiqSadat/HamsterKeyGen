@@ -2,6 +2,10 @@
 
 This is an asynchronous Python script to generate Hamster Kombat Keys.
 
+## Web Version
+
+[HamsterKeyGenWeb](https://github.com/ShafiqSadat/HamsterKeyGenWeb)
+
 ## Features
 - Generate unique client IDs.
 - Authenticate and obtain client tokens.
