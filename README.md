@@ -1,4 +1,5 @@
 # HamsterKeyGen
+![image](https://github.com/user-attachments/assets/18ed1781-bd34-45ff-84a8-4c96043bdda7)
 
 This is an asynchronous Python script to generate Hamster Kombat Keys.
 
