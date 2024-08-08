@@ -138,10 +138,11 @@ if __name__ == "__main__":
     logger.info(f"Generating {key_count} key(s) for {games[game_choice]['name']} using proxies from {proxy_file if proxies else 'no proxies'}")
     keys, game_name = asyncio.run(main(game_choice, key_count, proxies))
     if keys:
-        logger.success("Generated Key(s) was successfully saved to keys.txt.")
-        with open('keys.txt', 'a') as file:  # Open the file in append mode
+        file_name = f"{game_name.replace(' ', '_').lower()}_keys.txt"
+        logger.success(f"Generated Key(s) were successfully saved to {file_name}.")
+        with open(file_name, 'a') as file:  # Open the file in append mode
             for key in keys:
-                formatted_key = f"{game_name} : {key}"
+                formatted_key = f"{key}"
                 logger.success(formatted_key)
                 file.write(f"{formatted_key}\n")
     else:
