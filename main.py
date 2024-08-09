@@ -41,6 +41,7 @@ games = {
 
 EVENTS_DELAY = 20000 / 1000  # converting milliseconds to seconds
 
+
 async def load_proxies(file_path):
     try:
         if os.path.exists(file_path):
@@ -55,22 +56,26 @@ async def load_proxies(file_path):
         logger.error(f"Error reading proxy file {file_path}: {e}")
         return []
 
+
 async def generate_client_id():
     timestamp = int(time.time() * 1000)
     random_numbers = ''.join(str(random.randint(0, 9)) for _ in range(19))
     return f"{timestamp}-{random_numbers}"
+
 
 async def login(client_id, app_token, proxies, retries=5):
     for attempt in range(retries):
         proxy = random.choice(proxies) if proxies else None
         async with httpx.AsyncClient(proxies=proxy) as client:
             try:
+                logger.info(f"Attempting to log in with client ID: {client_id} (Attempt {attempt + 1}/{retries})")
                 response = await client.post(
                     'https://api.gamepromo.io/promo/login-client',
                     json={'appToken': app_token, 'clientId': client_id, 'clientOrigin': 'deviceid'}
                 )
                 response.raise_for_status()
                 data = response.json()
+                logger.info(f"Login successful for client ID: {client_id}")
                 return data['clientToken']
             except httpx.HTTPStatusError as e:
                 logger.error(f"Failed to login (attempt {attempt + 1}/{retries}): {e.response.json()}")
@@ -80,8 +85,10 @@ async def login(client_id, app_token, proxies, retries=5):
     logger.error("Maximum login attempts reached. Returning None.")
     return None
 
+
 async def emulate_progress(client_token, promo_id, proxies):
     proxy = random.choice(proxies) if proxies else None
+    logger.info(f"Emulating progress for promo ID: {promo_id}")
     async with httpx.AsyncClient(proxies=proxy) as client:
         response = await client.post(
             'https://api.gamepromo.io/promo/register-event',
@@ -92,8 +99,10 @@ async def emulate_progress(client_token, promo_id, proxies):
         data = response.json()
         return data['hasCode']
 
+
 async def generate_key(client_token, promo_id, proxies):
     proxy = random.choice(proxies) if proxies else None
+    logger.info(f"Generating key for promo ID: {promo_id}")
     async with httpx.AsyncClient(proxies=proxy) as client:
         response = await client.post(
             'https://api.gamepromo.io/promo/create-code',
@@ -104,34 +113,62 @@ async def generate_key(client_token, promo_id, proxies):
         data = response.json()
         return data['promoCode']
 
+
 async def generate_key_process(app_token, promo_id, proxies):
     client_id = await generate_client_id()
+    logger.info(f"Generated client ID: {client_id}")
     client_token = await login(client_id, app_token, proxies)
     if not client_token:
+        logger.error(f"Failed to generate client token for client ID: {client_id}")
         return None
 
-    for _ in range(11):
+    for i in range(11):
+        logger.info(f"Emulating progress event {i + 1}/11 for client ID: {client_id}")
         await asyncio.sleep(EVENTS_DELAY * (random.random() / 3 + 1))
         try:
             has_code = await emulate_progress(client_token, promo_id, proxies)
         except httpx.HTTPStatusError:
+            logger.warning(f"Event {i + 1}/11 failed for client ID: {client_id}")
             continue
 
         if has_code:
+            logger.info(f"Progress event triggered key generation for client ID: {client_id}")
             break
 
     try:
         key = await generate_key(client_token, promo_id, proxies)
+        logger.info(f"Generated key: {key} for client ID: {client_id}")
         return key
     except httpx.HTTPStatusError as e:
         logger.error(f"Failed to generate key: {e.response.json()}")
         return None
 
+
+async def spinner_task():
+    spinner = ["|", "/", "-", "\\"]
+    idx = 0
+    while True:
+        sys.stdout.write(f"\rWorking... {spinner[idx]}")
+        sys.stdout.flush()
+        idx = (idx + 1) % len(spinner)
+        await asyncio.sleep(0.1)
+
+
 async def main(game_choice, key_count, proxies):
     game = games[game_choice]
+    logger.info(f"Starting key generation for {game['name']}")
+
+    spinner = asyncio.create_task(spinner_task())  # Start the spinner task
+
     tasks = [generate_key_process(game['appToken'], game['promoId'], proxies) for _ in range(key_count)]
     keys = await asyncio.gather(*tasks)
+
+    spinner.cancel()  # Stop the spinner task
+    sys.stdout.write("\r")  # Clear the spinner line
+
+    logger.info(f"Key generation completed for {game['name']}")
     return [key for key in keys if key], game['name']
+
 
 if __name__ == "__main__":
     print("Select a game:")
@@ -143,7 +180,8 @@ if __name__ == "__main__":
 
     proxies = asyncio.run(load_proxies(proxy_file))
 
-    logger.info(f"Generating {key_count} key(s) for {games[game_choice]['name']} using proxies from {proxy_file if proxies else 'no proxies'}")
+    logger.info(
+        f"Generating {key_count} key(s) for {games[game_choice]['name']} using proxies from {proxy_file if proxies else 'no proxies'}")
     keys, game_name = asyncio.run(main(game_choice, key_count, proxies))
     if keys:
         file_name = f"{game_name.replace(' ', '_').lower()}_keys.txt"
