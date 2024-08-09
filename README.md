@@ -90,5 +90,8 @@ If you do not specify a proxy file, the script will attempt to use `proxy.txt` b
 - **generate_key_process**: Orchestrates the process of generating a key.
 - **main**: Main function to generate multiple keys concurrently.
 
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/ShafiqSadat/HamsterKeyGen.svg?variant=adaptive)](https://starchart.cc/ShafiqSadat/HamsterKeyGen)
+
 ## License
 This project is licensed under the GPL-3.0 license.
