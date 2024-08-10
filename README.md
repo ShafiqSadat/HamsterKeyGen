@@ -7,7 +7,7 @@ This is an asynchronous Python script to generate Hamster Kombat Keys.
 
 [HamsterKeyGenWeb](https://github.com/ShafiqSadat/HamsterKeyGenWeb)
 
-## 💹 Need bulk keys? 
+## ⭐ 💹 Need bulk keys? 
 - Contact me: [Telegram](https://t.me/Shafiq)
 
 ## Features
