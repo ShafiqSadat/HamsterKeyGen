@@ -132,13 +132,13 @@ async def generate_key_process(app_token, promo_id, proxies):
         logger.error(f"Failed to generate client token for client ID: {client_id}")
         return None
 
-    for i in range(11):
+    for i in range(15):
         logger.info(f"Emulating progress event {i + 1}/11 for client ID: {client_id}")
         await asyncio.sleep(EVENTS_DELAY * (random.random() / 3 + 1))
         try:
             has_code = await emulate_progress(client_token, promo_id, proxies)
         except httpx.HTTPStatusError:
-            logger.warning(f"Event {i + 1}/11 failed for client ID: {client_id}")
+            logger.warning(f"Event {i + 1}/15 failed for client ID: {client_id}")
             continue
 
         if has_code:
