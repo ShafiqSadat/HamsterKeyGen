@@ -132,7 +132,7 @@ async def generate_key_process(app_token, promo_id, proxies):
         logger.error(f"Failed to generate client token for client ID: {client_id}")
         return None
 
-    for i in range(15):
+    for i in range(25):
         logger.info(f"Emulating progress event {i + 1}/11 for client ID: {client_id}")
         await asyncio.sleep(EVENTS_DELAY * (random.random() / 3 + 1))
         try:
