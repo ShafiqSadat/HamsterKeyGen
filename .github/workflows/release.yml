@@ -60,15 +60,15 @@ jobs:
           pyinstaller --windowed --onefile main.py
       - name: Rename app
         run: |
-          mv dist/main.app "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.app"
+          mv dist/main.app "HamsterKeyGen-v1.0.${{ github.run_number }}-macARM.app"
       - name: Zip the app
         run: |
-          zip -r "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.zip" "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.app"
+          zip -r "HamsterKeyGen-v1.0.${{ github.run_number }}-macARM.zip" "HamsterKeyGen-v1.0.${{ github.run_number }}-macARM.app"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: macos-build
-          path: "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.zip"
+          path: "HamsterKeyGen-v1.0.${{ github.run_number }}-macARM.zip"
 
 
   create-release:
