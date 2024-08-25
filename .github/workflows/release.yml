@@ -1,0 +1,94 @@
+name: "Build & Release"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+  push:
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      - name: Build executable
+        run: |
+          pyinstaller --onefile main.py
+      - name: Rename executable
+        run: |
+          Rename-Item -Path dist/main.exe -NewName HamsterKeyGen-v1.0.${{ github.run_number }}-windows.exe
+        shell: pwsh
+      - name: Zip the exe
+        run: |
+          Compress-Archive -Path "dist/HamsterKeyGen-v1.0.${{ github.run_number }}-windows.exe" -DestinationPath "dist/HamsterKeyGen-v1.0.${{ github.run_number }}-windows.zip"
+        shell: pwsh
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: dist/HamsterKeyGen-v1.0.${{ github.run_number }}-windows.zip
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      - name: Build executable
+        run: |
+          pyinstaller --windowed --onefile main.py
+      - name: Rename app
+        run: |
+          mv dist/main.app "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.app"
+      - name: Zip the app
+        run: |
+          zip -r "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.zip" "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.app"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.zip"
+
+
+  create-release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Windows build
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+          path: ./build
+      - name: Download macOS build
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+          path: ./build
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ./build/*
+          tag: v1.0.${{ github.run_number }}
+          token: ${{ secrets.GITHUB_TOKEN }}
