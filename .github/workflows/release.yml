@@ -15,9 +15,9 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.8'
       - name: Install dependencies
@@ -30,20 +30,24 @@ jobs:
           pyinstaller --onefile main.py
       - name: Rename executable
         run: |
-          Rename-Item -Path dist/main.exe -NewName HamsterKeyGen-v1.0.${{ github.run_number }}.exe
+          Rename-Item -Path dist/main.exe -NewName HamsterKeyGen-v1.0.${{ github.run_number }}-windows.exe
+        shell: pwsh
+      - name: Zip the exe
+        run: |
+          Compress-Archive -Path "dist/HamsterKeyGen-v1.0.${{ github.run_number }}-windows.exe" -DestinationPath "dist/HamsterKeyGen-v1.0.${{ github.run_number }}-windows.zip"
         shell: pwsh
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: windows-build
-          path: dist/HamsterKeyGen-v1.0.${{ github.run_number }}.exe
+          path: dist/HamsterKeyGen-v1.0.${{ github.run_number }}-windows.zip
 
   build-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.8'
       - name: Install dependencies
@@ -53,28 +57,32 @@ jobs:
           pip install pyinstaller
       - name: Build executable
         run: |
-          pyinstaller --onefile main.py
-      - name: Rename executable
+          pyinstaller --windowed --onefile main.py
+      - name: Rename app
         run: |
-          mv dist/main dist/HamsterKeyGen-v1.0.${{ github.run_number }}.app
+          mv dist/main.app "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.app"
+      - name: Zip the app
+        run: |
+          zip -r "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.zip" "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.app"
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: macos-build
-          path: dist/HamsterKeyGen-v1.0.${{ github.run_number }}.app
+          path: "HamsterKeyGen-v1.0.${{ github.run_number }}-mac.zip"
+
 
   create-release:
     needs: [build-windows, build-macos]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Download Windows build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: windows-build
           path: ./build
       - name: Download macOS build
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: macos-build
           path: ./build
@@ -83,4 +91,4 @@ jobs:
         with:
           artifacts: ./build/*
           tag: v1.0.${{ github.run_number }}
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
