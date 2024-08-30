@@ -52,34 +52,41 @@ games = {
         'timing': 20000 / 1000,
         'attempts': 20,
     },
-      6: {
+    6: {
         'name': 'Polysphere',
         'appToken': '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71',
         'promoId': '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71',
         'timing': 20000 / 1000,
         'attempts': 20,
     },
-        7: {
+    7: {
         'name': 'Mow and Trim',
         'appToken': 'ef319a80-949a-492e-8ee0-424fb5fc20a6',
         'promoId': 'ef319a80-949a-492e-8ee0-424fb5fc20a6',
         'timing': 20000 / 1000,
         'attempts': 20,
     },
-      8: {
+    8: {
         'name': 'Mud Racing',
         'appToken': '8814a785-97fb-4177-9193-ca4180ff9da8',
         'promoId': '8814a785-97fb-4177-9193-ca4180ff9da8',
         'timing': 20000 / 1000,
         'attempts': 20,
     },
-        9: {
+    9: {
         'name': 'Cafe Dash',
         'appToken': 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11',
         'promoId': 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11',
         'timing': 20000 / 1000,
         'attempts': 20,
-    }
+    },
+    10: {
+        'name': 'Zoopolis',
+        'appToken': 'b2436c89-e0aa-4aed-8046-9b0515e1c46b',
+        'promoId': 'b2436c89-e0aa-4aed-8046-9b0515e1c46b',
+        'timing': 20000 / 1000,
+        'attempts': 20,
+    },
 }
 
 
