@@ -80,6 +80,13 @@ games = {
         'timing': 30000 / 1000,
         'attempts': 20,
     },
+    10: {
+        'name': 'Stone Age',
+        'appToken': '04ebd6de-69b7-43d1-9c4b-04a6ca3305af',
+        'promoId': '04ebd6de-69b7-43d1-9c4b-04a6ca3305af',
+        'timing': 20000 / 1000,
+        'attempts': 20,
+    },
 }
 
 
