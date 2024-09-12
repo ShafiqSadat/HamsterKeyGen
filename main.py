@@ -87,6 +87,13 @@ games = {
         'timing': 20000 / 1000,
         'attempts': 20,
     },
+   11: {
+        'name': 'Bouncemasters',
+        'appToken': 'bc72d3b9-8e91-4884-9c33-f72482f0db37',
+        'promoId': 'bc72d3b9-8e91-4884-9c33-f72482f0db37',
+        'timing': 20000 / 1000,
+        'attempts': 20,
+    },
 }
 
 
