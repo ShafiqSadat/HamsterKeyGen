@@ -108,6 +108,13 @@ games = {
         'timing': 30000 / 1000,
         'attempts': 20,
     },
+      13: {
+        'name': 'Count Masters',
+        'appToken': '4bdc17da-2601-449b-948e-f8c7bd376553',
+        'promoId': '4bdc17da-2601-449b-948e-f8c7bd376553',
+        'timing': 30000 / 1000,
+        'attempts': 20,
+    },
 }
 
 
