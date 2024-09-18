@@ -101,6 +101,13 @@ games = {
         'timing': 40000 / 1000,
         'attempts': 20,
     },
+    12: {
+        'name': 'Pin Out Master',
+        'appToken': 'd2378baf-d617-417a-9d99-d685824335f0',
+        'promoId': 'd2378baf-d617-417a-9d99-d685824335f0',
+        'timing': 30000 / 1000,
+        'attempts': 20,
+    },
 }
 
 
