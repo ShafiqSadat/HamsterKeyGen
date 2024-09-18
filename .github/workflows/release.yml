@@ -52,9 +52,9 @@ jobs:
           python-version: '3.12'
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pyinstaller
+          python3 -m pip install --upgrade pip
+          pip3 install -r requirements.txt
+          pip3 install pyinstaller
       - name: Build executable
         run: |
           pyinstaller --windowed --onefile main.py
