@@ -122,6 +122,13 @@ games = {
         'timing': 30000 / 1000,
         'attempts': 20,
     },
+    16: {
+        'name': 'Among Waterr',
+        'appToken': 'daab8f83-8ea2-4ad0-8dd5-d33363129640',
+        'promoId': 'daab8f83-8ea2-4ad0-8dd5-d33363129640',
+        'timing': 30000 / 1000,
+        'attempts': 20,
+    },
 }
 
 
