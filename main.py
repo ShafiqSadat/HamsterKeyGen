@@ -129,6 +129,13 @@ games = {
         'timing': 30000 / 1000,
         'attempts': 20,
     },
+    17: {
+        'name': 'Factory World',
+        'appToken': 'd02fc404-8985-4305-87d8-32bd4e66bb16',
+        'promoId': 'd02fc404-8985-4305-87d8-32bd4e66bb16',
+        'timing': 30000 / 1000,
+        'attempts': 20,
+    },
 }
 
 
