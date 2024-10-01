@@ -136,6 +136,20 @@ games = {
         'timing': 30000 / 1000,
         'attempts': 20,
     },
+    18: {
+        'name': 'Snake Run',
+        'appToken': 'c8e017e2-8817-4d02-bce6-b951e74bb18f',
+        'promoId': 'c8e017e2-8817-4d02-bce6-b951e74bb18f',
+        'timing': 30000 / 1000,
+        'attempts': 20,
+    },
+    19: {
+        'name': 'Cooking Stories',
+        'appToken': 'ed526e8c-e6c8-40fd-b72a-9e78ff6a2054',
+        'promoId': 'ed526e8c-e6c8-40fd-b72a-9e78ff6a2054',
+        'timing': 30000 / 1000,
+        'attempts': 20,
+    },
 }
 
 
